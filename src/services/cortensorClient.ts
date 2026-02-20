@@ -32,14 +32,25 @@ export const CortensorNetwork = {
         // Simulate network latency
         await new Promise(resolve => setTimeout(resolve, 800));
 
-        // Simple matching logic
-        const candidates = MOCK_NODES.filter(n =>
+        // Priority 1: Find specialist nodes that match the exact task type
+        const specialists = MOCK_NODES.filter(n =>
             n.status !== 'offline' &&
-            (taskType.includes(n.specialization) || n.specialization === 'General')
+            n.specialization === taskType
         );
 
-        return candidates.length > 0
-            ? candidates[Math.floor(Math.random() * candidates.length)]
+        if (specialists.length > 0) {
+            // Pick highest reputation specialist
+            return specialists.sort((a, b) => b.reputation - a.reputation)[0];
+        }
+
+        // Priority 2: Fallback to General-purpose nodes
+        const generalNodes = MOCK_NODES.filter(n =>
+            n.status !== 'offline' &&
+            n.specialization === 'General'
+        );
+
+        return generalNodes.length > 0
+            ? generalNodes[0]
             : MOCK_NODES[0];
     },
 
