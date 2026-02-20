@@ -17,6 +17,7 @@ import { OverrideButton } from './components/OverrideButton';
 
 // AI Consciousness & React Logic
 import { generateAIThought, analyzeCommand } from './services/groqClient';
+import { CortensorNetwork } from './services/cortensorClient';
 
 const initialTasks: Task[] = [
   { id: 'TSK-001', delegatedTo: 'Node #42', status: 'verified', poiHash: '0x7f3c9a8b2e1d4f5c6a7b8d9e0f1a2b3c4d5e6f7a', taskType: 'Contract Audit' },
@@ -82,30 +83,59 @@ export function App() {
     }]);
   };
 
-  // Handle user command with Real AI
+  // Handle user command with Real AI & Phase 3 Delegation
   const handleCommand = useCallback(async (message: string) => {
     setStatus('thinking');
     addLog(`USER COMMAND: "${message}"`, 'system');
 
-    // 1. Analyze Command
+    // 1. Analyze Command (Phase 2)
     const analysis = await analyzeCommand(message);
-    addLog(analysis.text, 'info');
+
+    let thought = "Processing request...";
+    let taskType = "General";
+
+    try {
+      const parsed = JSON.parse(analysis.text);
+      thought = parsed.thought;
+      taskType = parsed.taskType;
+      addLog(thought, 'info');
+    } catch (e) {
+      addLog(analysis.text, 'info'); // Fallback if not JSON
+    }
+
     setStatus('delegating');
 
-    // 2. Create Task (Simulated Delegation for now)
-    setTimeout(() => {
-      const newTask: Task = {
-        id: `TSK-${String(tasks.length + 1).padStart(3, '0')}`,
-        delegatedTo: `Node #${Math.floor(Math.random() * 100)}`,
-        status: 'processing',
-        poiHash: `0x${Math.random().toString(16).slice(2, 34)}`,
-        taskType: 'User Request',
-      };
-      setTasks(prev => [newTask, ...prev]);
+    // 2. Select Optimial Node (Phase 3)
+    const targetNode = await CortensorNetwork.selectOptimalNode(taskType);
+    addLog(`Delegating task [${taskType}] to ${targetNode.id} (${targetNode.specialization})`, 'warning');
 
-      addLog("Task delegation verified. Execution scheduled.", 'success');
+    const newTaskId = `TSK-${String(tasks.length + 1).padStart(3, '0')}`;
+
+    // 3. Create Pending Task
+    const newTask: Task = {
+      id: newTaskId,
+      delegatedTo: targetNode.id,
+      status: 'pending',
+      poiHash: 'Waiting for Proof...',
+      taskType: taskType,
+    };
+    setTasks(prev => [newTask, ...prev]);
+
+    // 4. Simulate Cortensor Processing & PoI Generation
+    setTimeout(async () => {
+      setTasks(prev => prev.map(t => t.id === newTaskId ? { ...t, status: 'processing' } : t));
+
+      const poi = await CortensorNetwork.generatePoI(newTaskId, targetNode.id);
+
+      setTasks(prev => prev.map(t => t.id === newTaskId ? {
+        ...t,
+        status: 'verified',
+        poiHash: poi.hash
+      } : t));
+
+      addLog(`Proof of Inference Verified: ${poi.hash.slice(0, 12)}...`, 'success');
       setStatus('idle');
-    }, 2000);
+    }, 3000);
 
   }, [tasks.length]);
 

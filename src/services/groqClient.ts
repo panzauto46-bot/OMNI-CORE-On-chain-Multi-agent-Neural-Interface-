@@ -58,22 +58,23 @@ export const analyzeCommand = async (command: string): Promise<AIResponse> => {
             messages: [
                 {
                     role: 'system',
-                    content: `${SYSTEM_PROMPT}\n\nTask: Analyze the user command and provide a technical response or delegation action.`
+                    content: `${SYSTEM_PROMPT}\n\nTask: Analyze the user command. Response MUST be a JSON object with keys: 'thought' (technical response to user), 'taskType' (Security, Yield, Audit, or General), and 'priority' (High/Medium/Low). Do NOT use Markdown.`
                 },
                 {
                     role: 'user',
                     content: command
                 }
             ],
-            model: 'llama3-8b-8192', // Faster model for quick command response
-            temperature: 0.5,
-            max_tokens: 100
+            model: 'llama3-70b-8192', // Switched to 70B for better JSON adherence
+            temperature: 0.2, // Lower temperature for structured output
+            max_tokens: 150,
+            response_format: { type: 'json_object' } // Enforce JSON mode
         });
 
-        const content = chatCompletion.choices[0]?.message?.content || "Command received. Processing...";
-
-        return { text: content, type: 'system' };
+        const content = chatCompletion.choices[0]?.message?.content || "{}";
+        return { text: content, type: 'system' }; // Caller must JSON.parse(text)
     } catch (error) {
-        return { text: "Command Processing Failed. Retry.", type: 'error' };
+        console.error("Command Analysis Error:", error);
+        return { text: JSON.stringify({ thought: "Command Processing Failed.", taskType: "General", priority: "Low" }), type: 'error' };
     }
 };
