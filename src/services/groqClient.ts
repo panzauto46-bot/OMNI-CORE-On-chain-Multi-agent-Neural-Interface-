@@ -48,7 +48,7 @@ export const generateAIThought = async (context: string[]): Promise<AIResponse> 
 
     } catch (error) {
         console.error("AI Generation Error:", error);
-        return { text: "Neural Link Destabilized. Reconnecting...", type: 'error' };
+        return { text: "System standby... (Optimizing neural pathways)", type: 'system' };
     }
 };
 

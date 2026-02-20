@@ -70,7 +70,7 @@ export function App() {
         const thought = await generateAIThought([`Current status: Idle. Context: ${ctx}`]);
         addLog(thought.text, thought.type);
       }
-    }, 12000);
+    }, 60000);
 
     return () => clearInterval(interval);
   }, [status]);
