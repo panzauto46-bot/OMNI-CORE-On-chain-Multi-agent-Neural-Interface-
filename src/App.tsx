@@ -15,19 +15,8 @@ import { TreasuryWatch } from './components/TreasuryWatch';
 import { AuditLogs, AuditLog } from './components/AuditLogs';
 import { OverrideButton } from './components/OverrideButton';
 
-// AI Consciousness thoughts simulation
-const aiThoughts = [
-  { text: "Initializing neural pathways... Connection established.", type: "system" as const },
-  { text: "Scanning BNB Smart Chain for active liquidity pools...", type: "info" as const },
-  { text: "Detected 247 pools with TVL > $100k. Analyzing volatility patterns.", type: "info" as const },
-  { text: "Anomaly detected in PancakeSwap BNB/USDT pool. Price deviation: 0.3%", type: "warning" as const },
-  { text: "Delegating smart contract validation to Cortensor Network...", type: "system" as const },
-  { text: "Cortensor Node #42 accepted task. Awaiting Proof of Inference.", type: "info" as const },
-  { text: "PoI validated. Contract security score: 94/100. Proceeding.", type: "success" as const },
-  { text: "Calculating optimal yield strategy for current portfolio allocation.", type: "info" as const },
-  { text: "Recommended action: Reallocate 15% from CAKE staking to BNB-USDT LP.", type: "info" as const },
-  { text: "Awaiting human confirmation for transaction execution.", type: "system" as const },
-];
+// AI Consciousness & React Logic
+import { generateAIThought, analyzeCommand } from './services/groqClient';
 
 const initialTasks: Task[] = [
   { id: 'TSK-001', delegatedTo: 'Node #42', status: 'verified', poiHash: '0x7f3c9a8b2e1d4f5c6a7b8d9e0f1a2b3c4d5e6f7a', taskType: 'Contract Audit' },
@@ -49,65 +38,62 @@ const initialAuditLogs: AuditLog[] = [
 
 export function App() {
   const [status, setStatus] = useState<'idle' | 'thinking' | 'delegating'>('idle');
-  const [logs, setLogs] = useState<LogEntry[]>([]);
+  const [logs, setLogs] = useState<LogEntry[]>([
+    { id: 1, text: "System Initialized. OMNI-CORE v1.0.0 Online.", type: 'system', timestamp: new Date().toLocaleTimeString() }
+  ]);
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [agents] = useState<Agent[]>(initialAgents);
   const [auditLogs] = useState<AuditLog[]>(initialAuditLogs);
-  const [logIndex, setLogIndex] = useState(0);
 
-  // Simulate AI consciousness stream
+  // Live Consciousness Stream - Real AI
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (logIndex < aiThoughts.length) {
-        const thought = aiThoughts[logIndex];
-        const newLog: LogEntry = {
-          id: Date.now(),
-          text: thought.text,
-          type: thought.type,
-          timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
-        };
-        
-        setLogs(prev => [...prev, newLog]);
-        setLogIndex(prev => prev + 1);
+    // Initial thought
+    const sparkConsciousness = async () => {
+      const thought = await generateAIThought(["System reboot complete. Status report?"]);
+      addLog(thought.text, thought.type);
+    };
+    sparkConsciousness();
 
-        // Update status based on thought type
-        if (thought.type === 'system' && thought.text.includes('Delegating')) {
-          setStatus('delegating');
-        } else if (thought.type === 'info') {
-          setStatus('thinking');
-        } else if (thought.type === 'success') {
-          setStatus('idle');
-        }
+    // Periodic "Idle" thoughts (every 10-15 seconds) to save tokens but keep it alive
+    const interval = setInterval(async () => {
+      if (status === 'idle') {
+        const randomContext = [
+          "Scan the blockchain for arbitrage opportunities.",
+          "Check Cortensor node health.",
+          "Analyze gas price trends on BSC.",
+          "Reviewing smart contract security protocols.",
+          "Monitoring liquidity pool depth."
+        ];
+        const ctx = randomContext[Math.floor(Math.random() * randomContext.length)];
+        const thought = await generateAIThought([`Current status: Idle. Context: ${ctx}`]);
+        addLog(thought.text, thought.type);
       }
-    }, 3000);
+    }, 12000);
 
     return () => clearInterval(interval);
-  }, [logIndex]);
+  }, [status]);
 
-  // Handle user command
-  const handleCommand = useCallback((message: string) => {
-    setStatus('thinking');
-    
-    const userLog: LogEntry = {
+  const addLog = (text: string, type: LogEntry['type']) => {
+    setLogs(prev => [...prev.slice(-19), {
       id: Date.now(),
-      text: `USER COMMAND: "${message}"`,
-      type: 'system',
+      text,
+      type,
       timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
-    };
-    setLogs(prev => [...prev, userLog]);
+    }]);
+  };
 
-    // Simulate AI processing
+  // Handle user command with Real AI
+  const handleCommand = useCallback(async (message: string) => {
+    setStatus('thinking');
+    addLog(`USER COMMAND: "${message}"`, 'system');
+
+    // 1. Analyze Command
+    const analysis = await analyzeCommand(message);
+    addLog(analysis.text, 'info');
+    setStatus('delegating');
+
+    // 2. Create Task (Simulated Delegation for now)
     setTimeout(() => {
-      const responseLog: LogEntry = {
-        id: Date.now() + 1,
-        text: `Processing request... Analyzing "${message.slice(0, 30)}..."`,
-        type: 'info',
-        timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
-      };
-      setLogs(prev => [...prev, responseLog]);
-      setStatus('delegating');
-
-      // Add new task
       const newTask: Task = {
         id: `TSK-${String(tasks.length + 1).padStart(3, '0')}`,
         delegatedTo: `Node #${Math.floor(Math.random() * 100)}`,
@@ -117,17 +103,10 @@ export function App() {
       };
       setTasks(prev => [newTask, ...prev]);
 
-      setTimeout(() => {
-        setStatus('idle');
-        const doneLog: LogEntry = {
-          id: Date.now() + 2,
-          text: `Task delegated successfully. Awaiting Cortensor validation.`,
-          type: 'success',
-          timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
-        };
-        setLogs(prev => [...prev, doneLog]);
-      }, 2000);
-    }, 1500);
+      addLog("Task delegation verified. Execution scheduled.", 'success');
+      setStatus('idle');
+    }, 2000);
+
   }, [tasks.length]);
 
   // Handle override
@@ -159,12 +138,12 @@ export function App() {
       {/* Main Layout */}
       <div className="relative z-10 flex flex-col h-screen">
         <Header />
-        
+
         {/* Main Content - 3 Panel Layout */}
         <main className="flex-1 p-4 grid grid-cols-12 gap-4 overflow-hidden">
-          
+
           {/* LEFT PANEL: Consciousness Stream */}
-          <motion.div 
+          <motion.div
             className="col-span-12 lg:col-span-4 flex flex-col gap-4"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -188,7 +167,7 @@ export function App() {
           </motion.div>
 
           {/* CENTER PANEL: Delegation Matrix */}
-          <motion.div 
+          <motion.div
             className="col-span-12 lg:col-span-5 flex flex-col gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -226,7 +205,7 @@ export function App() {
           </motion.div>
 
           {/* RIGHT PANEL: Action & Memory Hub */}
-          <motion.div 
+          <motion.div
             className="col-span-12 lg:col-span-3 flex flex-col gap-4"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
