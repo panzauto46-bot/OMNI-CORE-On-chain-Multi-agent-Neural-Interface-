@@ -179,8 +179,10 @@ OMNI-CORE/
 - [x] Error handling improvements (graceful fallbacks).
 - [x] Comprehensive documentation for hackathon submission.
 
-### **Phase 5: Web3 Execution (Future) ⏳**
-- [ ] Live wallet connection (MetaMask/Rabby).
+### **Phase 5: Web3 Execution ✅**
+- [x] Live wallet connection (MetaMask).
+- [x] Real balance display & chain detection.
+- [x] Explorer links (BscScan, Etherscan).
 - [ ] Smart contract interaction (Read/Write).
 - [ ] Automated yield farming execution.
 - [ ] Real Cortensor Network integration.
