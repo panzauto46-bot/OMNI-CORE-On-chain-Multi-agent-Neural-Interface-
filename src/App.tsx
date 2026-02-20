@@ -225,7 +225,7 @@ export function App() {
               subtitle="Portfolio & Guarded Contracts"
               className="flex-1 overflow-hidden"
             >
-              <div className="p-4 max-h-80 overflow-y-auto">
+              <div className="p-4 flex-1 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-neon-cyan/20 scrollbar-track-transparent">
                 <TreasuryWatch />
               </div>
             </Panel>

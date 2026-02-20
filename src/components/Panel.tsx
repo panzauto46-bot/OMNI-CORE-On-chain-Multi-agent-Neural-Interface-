@@ -39,9 +39,9 @@ export function Panel({ title, subtitle, icon, children, className = '', variant
           )}
         </div>
       </div>
-      
+
       {/* Content */}
-      <div className="relative">
+      <div className="relative flex-1 flex flex-col min-h-0">
         {children}
       </div>
     </motion.div>
