@@ -136,15 +136,15 @@ export function App() {
       </div>
 
       {/* Main Layout */}
-      <div className="relative z-10 flex flex-col h-screen">
+      <div className="relative z-10 flex flex-col min-h-screen">
         <Header />
 
         {/* Main Content - 3 Panel Layout */}
-        <main className="flex-1 p-4 grid grid-cols-12 gap-4 overflow-hidden">
+        <main className="flex-1 p-4 grid grid-cols-12 gap-4">
 
           {/* LEFT PANEL: Consciousness Stream */}
           <motion.div
-            className="col-span-12 lg:col-span-4 flex flex-col gap-4"
+            className="col-span-12 lg:col-span-4 flex flex-col gap-4 h-[600px] lg:h-auto"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
