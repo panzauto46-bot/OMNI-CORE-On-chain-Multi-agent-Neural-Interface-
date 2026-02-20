@@ -39,6 +39,7 @@ const initialAuditLogs: AuditLog[] = [
 
 export function App() {
   const [status, setStatus] = useState<'idle' | 'thinking' | 'delegating'>('idle');
+  const [activeNodeId, setActiveNodeId] = useState<string | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([
     { id: 1, text: "System Initialized. OMNI-CORE v1.0.0 Online.", type: 'system', timestamp: new Date().toLocaleTimeString() }
   ]);
@@ -108,6 +109,7 @@ export function App() {
     // 2. Select Optimial Node (Phase 3)
     const targetNode = await CortensorNetwork.selectOptimalNode(taskType);
     addLog(`Delegating task [${taskType}] to ${targetNode.id} (${targetNode.specialization})`, 'warning');
+    setActiveNodeId(targetNode.id); // VISUALIZATION TRIGGER
 
     const newTaskId = `TSK-${String(tasks.length + 1).padStart(3, '0')}`;
 
@@ -135,6 +137,7 @@ export function App() {
 
       addLog(`Proof of Inference Verified: ${poi.hash.slice(0, 12)}...`, 'success');
       setStatus('idle');
+      setActiveNodeId(null); // RESET VISUALIZATION
     }, 3000);
 
   }, [tasks.length]);
@@ -209,7 +212,7 @@ export function App() {
               icon={<Network className="w-5 h-5" />}
               variant="purple"
             >
-              <NodeGraph3D />
+              <NodeGraph3D activeNodeId={activeNodeId} />
             </Panel>
 
             <Panel

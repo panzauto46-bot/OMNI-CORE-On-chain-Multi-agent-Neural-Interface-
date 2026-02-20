@@ -18,26 +18,26 @@ interface ConnectionData {
   dataFlow: boolean;
 }
 
-// Mock data for nodes
+// Mock data for nodes - Synced with CortensorClient
 const NODES: NodeData[] = [
   // Groq Central Node
-  { id: 'groq-core', position: [0, 0, 0], type: 'groq', status: 'active', task: 'Delegating' },
+  { id: 'Groq Core', position: [0, 0, 0], type: 'groq', status: 'active', task: 'Delegating' },
 
   // Worker Nodes (inner ring)
-  { id: 'worker-1', position: [4, 2, 0], type: 'worker', status: 'busy', task: 'Validation' },
-  { id: 'worker-2', position: [3, 3, 2], type: 'worker', status: 'active', task: 'Inference' },
-  { id: 'worker-3', position: [0, 4, 1], type: 'worker', status: 'busy', task: 'Compute' },
-  { id: 'worker-4', position: [-3, 3, 2], type: 'worker', status: 'idle', task: 'Standby' },
-  { id: 'worker-5', position: [-4, 1, -1], type: 'worker', status: 'active', task: 'Audit' },
-  { id: 'worker-6', position: [-2, -3, 0], type: 'worker', status: 'busy', task: 'Verify' },
-  { id: 'worker-7', position: [2, -3, 1], type: 'worker', status: 'idle', task: 'Standby' },
-  { id: 'worker-8', position: [4, -1, -2], type: 'worker', status: 'active', task: 'Process' },
+  { id: 'Node #42', position: [4, 2, 0], type: 'worker', status: 'busy', task: 'Security' },
+  { id: 'Node #18', position: [3, 3, 2], type: 'worker', status: 'active', task: 'Yield' },
+  { id: 'Node #73', position: [0, 4, 1], type: 'worker', status: 'busy', task: 'Audit' },
+  { id: 'Node #55', position: [-3, 3, 2], type: 'worker', status: 'idle', task: 'Standby' },
+  { id: 'Node #09', position: [-4, 1, -1], type: 'worker', status: 'active', task: 'General' },
+  { id: 'Node #99', position: [-2, -3, 0], type: 'worker', status: 'busy', task: 'Verify' },
+  { id: 'Node #XX', position: [2, -3, 1], type: 'worker', status: 'idle', task: 'Standby' },
+  { id: 'Node #88', position: [4, -1, -2], type: 'worker', status: 'active', task: 'Process' },
 
   // Validator Nodes (outer ring)
-  { id: 'validator-1', position: [7, 4, 2], type: 'validator', status: 'active', task: 'Consensus' },
-  { id: 'validator-2', position: [6, -4, -1], type: 'validator', status: 'busy', task: 'PoI Check' },
-  { id: 'validator-3', position: [-6, 4, 3], type: 'validator', status: 'active', task: 'Verify' },
-  { id: 'validator-4', position: [-7, -3, -2], type: 'validator', status: 'idle', task: 'Standby' },
+  { id: 'Validator-1', position: [7, 4, 2], type: 'validator', status: 'active', task: 'Consensus' },
+  { id: 'Validator-2', position: [6, -4, -1], type: 'validator', status: 'busy', task: 'PoI Check' },
+  { id: 'Validator-3', position: [-6, 4, 3], type: 'validator', status: 'active', task: 'Verify' },
+  { id: 'Validator-4', position: [-7, -3, -2], type: 'validator', status: 'idle', task: 'Standby' },
 ];
 
 // Connections between nodes
@@ -272,12 +272,21 @@ function GridFloor() {
 }
 
 // Main Scene Component
-function Scene() {
+function Scene({ activeNodeId }: { activeNodeId?: string | null }) {
+  const displayNodes = useMemo(() => {
+    if (!activeNodeId) return NODES;
+    return NODES.map(node =>
+      node.id === activeNodeId
+        ? { ...node, status: 'active' as const, task: '>>> ACTIVE <<<' }
+        : node
+    );
+  }, [activeNodeId]);
+
   const nodeMap = useMemo(() => {
     const map = new Map<string, NodeData>();
-    NODES.forEach(node => map.set(node.id, node));
+    displayNodes.forEach(node => map.set(node.id, node));
     return map;
-  }, []);
+  }, [displayNodes]);
 
   return (
     <>
@@ -301,23 +310,18 @@ function Scene() {
       {/* Grid Floor */}
       <GridFloor />
 
-      {/* Connection Lines */}
-      {CONNECTIONS.map((conn, idx) => {
-        const fromNode = nodeMap.get(conn.from);
-        const toNode = nodeMap.get(conn.to);
-        if (!fromNode || !toNode) return null;
-        return (
-          <ConnectionLine
-            key={`conn-${idx}`}
-            from={fromNode}
-            to={toNode}
-            dataFlow={conn.dataFlow}
-          />
-        );
-      })}
+      {/* Dynamic Connections */}
+      {displayNodes.filter(n => n.type !== 'groq').map((node, idx) => (
+        <ConnectionLine
+          key={`conn-${idx}`}
+          from={displayNodes[0]} // Assuming Groq Core is always the first node
+          to={node}
+          dataFlow={node.id === activeNodeId || node.status === 'busy'}
+        />
+      ))}
 
       {/* Nodes */}
-      {NODES.map((node) => (
+      {displayNodes.map((node) => (
         <CoreNode key={node.id} node={node} />
       ))}
 
@@ -328,7 +332,7 @@ function Scene() {
         enableRotate={true}
         minDistance={5}
         maxDistance={30}
-        autoRotate
+        autoRotate={!activeNodeId} // Stop rotation when active to focus
         autoRotateSpeed={0.5}
       />
     </>
@@ -336,7 +340,7 @@ function Scene() {
 }
 
 // Main Component Export
-export default function NodeGraph3D() {
+export default function NodeGraph3D({ activeNodeId }: { activeNodeId?: string | null }) {
   return (
     <div className="h-[600px] w-full rounded-xl overflow-hidden border border-cyan-500/30 bg-black/50 relative">
       {/* Overlay UI */}
@@ -368,7 +372,7 @@ export default function NodeGraph3D() {
         dpr={[1, 2]}
         className="cursor-move"
       >
-        <Scene />
+        <Scene activeNodeId={activeNodeId} />
       </Canvas>
     </div>
   );
