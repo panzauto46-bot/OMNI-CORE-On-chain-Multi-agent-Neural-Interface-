@@ -1,0 +1,76 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void-black: #0A0A0A;
+  --color-void-dark: #0D0D0D;
+  --color-void-gray: #141414;
+  --color-neon-cyan: #00F0FF;
+  --color-neon-cyan-dim: #00F0FF33;
+  --color-cortensor-purple: #9D4EDD;
+  --color-cortensor-orange: #FF6B35;
+  --color-success-green: #00FF88;
+  --color-warning-yellow: #FFD600;
+  --color-danger-red: #FF3366;
+  --font-mono: 'Fira Code', monospace;
+  --font-sans: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #0A0A0A;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #141414;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/* Glowing effects */
+.glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), 0 0 40px rgba(0, 240, 255, 0.1);
+}
+
+.glow-purple {
+  box-shadow: 0 0 20px rgba(157, 78, 221, 0.3), 0 0 40px rgba(157, 78, 221, 0.1);
+}
+
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3), 0 0 40px rgba(0, 255, 136, 0.1);
+}
+
+.glow-red {
+  box-shadow: 0 0 20px rgba(255, 51, 102, 0.4), 0 0 40px rgba(255, 51, 102, 0.2);
+}
+
+/* Glass morphism */
+.glass {
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-cyan {
+  background: rgba(0, 240, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+}
+
+.glass-purple {
+  background: rgba(157, 78, 221, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(157, 78, 221, 0.2);
+}

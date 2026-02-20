@@ -1,0 +1,112 @@
+import { motion } from 'framer-motion';
+import { TrendingUp, TrendingDown, Shield, Eye } from 'lucide-react';
+
+interface Asset {
+  symbol: string;
+  name: string;
+  balance: string;
+  value: string;
+  change: number;
+  icon?: string;
+}
+
+interface Contract {
+  name: string;
+  address: string;
+  status: 'guarded' | 'monitoring' | 'warning';
+}
+
+const assets: Asset[] = [
+  { symbol: 'BNB', name: 'BNB', balance: '12.5431', value: '$3,842.12', change: 2.34 },
+  { symbol: 'CAKE', name: 'PancakeSwap', balance: '1,250.00', value: '$2,125.00', change: -1.23 },
+  { symbol: 'USDT', name: 'Tether', balance: '5,000.00', value: '$5,000.00', change: 0.01 },
+];
+
+const contracts: Contract[] = [
+  { name: 'LP-BNB/CAKE', address: '0x0eD7e...3c4F', status: 'guarded' },
+  { name: 'Staking Pool', address: '0x7Bc9a...d2E1', status: 'monitoring' },
+  { name: 'Yield Vault', address: '0x4Fd2c...a8B3', status: 'guarded' },
+];
+
+const statusColors = {
+  guarded: 'text-success-green',
+  monitoring: 'text-warning-yellow',
+  warning: 'text-danger-red',
+};
+
+export function TreasuryWatch() {
+  const totalValue = '$10,967.12';
+
+  return (
+    <div className="space-y-4">
+      {/* Total Value */}
+      <div className="glass rounded-xl p-4">
+        <div className="text-gray-500 text-xs uppercase tracking-wider mb-1">Total Treasury Value</div>
+        <div className="flex items-end gap-3">
+          <span className="text-2xl font-bold text-white font-mono">{totalValue}</span>
+          <span className="text-success-green text-sm flex items-center gap-1 mb-1">
+            <TrendingUp className="w-4 h-4" />
+            +3.42%
+          </span>
+        </div>
+      </div>
+
+      {/* Asset List */}
+      <div className="space-y-2">
+        <div className="text-gray-500 text-xs uppercase tracking-wider px-1">Assets</div>
+        {assets.map((asset, index) => (
+          <motion.div
+            key={asset.symbol}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="glass rounded-lg p-3 flex items-center justify-between hover:bg-white/5 transition-colors cursor-pointer"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cortensor-orange to-cortensor-purple flex items-center justify-center text-white text-xs font-bold">
+                {asset.symbol.slice(0, 2)}
+              </div>
+              <div>
+                <div className="text-white text-sm font-medium">{asset.symbol}</div>
+                <div className="text-gray-500 text-xs">{asset.balance}</div>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-white text-sm font-mono">{asset.value}</div>
+              <div className={`text-xs flex items-center justify-end gap-1 ${asset.change >= 0 ? 'text-success-green' : 'text-danger-red'}`}>
+                {asset.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
+                {Math.abs(asset.change)}%
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Guarded Contracts */}
+      <div className="space-y-2">
+        <div className="text-gray-500 text-xs uppercase tracking-wider px-1 flex items-center gap-2">
+          <Shield className="w-3 h-3" />
+          Guarded Contracts
+        </div>
+        {contracts.map((contract, index) => (
+          <motion.div
+            key={contract.address}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 + index * 0.1 }}
+            className="glass rounded-lg p-3 flex items-center justify-between"
+          >
+            <div>
+              <div className="text-white text-sm">{contract.name}</div>
+              <div className="text-gray-600 text-xs font-mono">{contract.address}</div>
+            </div>
+            <div className={`flex items-center gap-1 ${statusColors[contract.status]}`}>
+              <Eye className="w-4 h-4" />
+              <span className="text-xs capitalize">{contract.status}</span>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
