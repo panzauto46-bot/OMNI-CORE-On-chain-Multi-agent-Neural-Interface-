@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Network, Wallet, FileText, Gauge } from 'lucide-react';
 
@@ -47,7 +47,11 @@ export function App() {
   const [agents] = useState<Agent[]>(initialAgents);
   const [auditLogs] = useState<AuditLog[]>(initialAuditLogs);
 
-  // Live Consciousness Stream - Real AI
+  // Use a ref to track status so the useEffect doesn't re-trigger
+  const statusRef = useRef(status);
+  useEffect(() => { statusRef.current = status; }, [status]);
+
+  // Live Consciousness Stream - Real AI (runs ONCE on mount)
   useEffect(() => {
     // Initial thought
     const sparkConsciousness = async () => {
@@ -56,9 +60,9 @@ export function App() {
     };
     sparkConsciousness();
 
-    // Periodic "Idle" thoughts (every 10-15 seconds) to save tokens but keep it alive
+    // Periodic "Idle" thoughts every 45 seconds
     const interval = setInterval(async () => {
-      if (status === 'idle') {
+      if (statusRef.current === 'idle') {
         const randomContext = [
           "Scan the blockchain for arbitrage opportunities.",
           "Check Cortensor node health.",
@@ -70,10 +74,11 @@ export function App() {
         const thought = await generateAIThought([`Current status: Idle. Context: ${ctx}`]);
         addLog(thought.text, thought.type);
       }
-    }, 60000);
+    }, 45000);
 
     return () => clearInterval(interval);
-  }, [status]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const addLog = (text: string, type: LogEntry['type']) => {
     setLogs(prev => [...prev.slice(-19), {
