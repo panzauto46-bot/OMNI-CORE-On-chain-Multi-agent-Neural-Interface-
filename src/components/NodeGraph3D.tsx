@@ -158,8 +158,8 @@ function CoreNode({ node }: { node: NodeData }) {
       <Html distanceFactor={10}>
         <div className="pointer-events-none whitespace-nowrap">
           <div className={`text-xs font-mono font-bold px-2 py-1 rounded ${node.type === 'groq' ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500/50' :
-              node.type === 'worker' ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50' :
-                'bg-orange-500/30 text-orange-300 border border-orange-500/50'
+            node.type === 'worker' ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50' :
+              'bg-orange-500/30 text-orange-300 border border-orange-500/50'
             }`}>
             {node.id}
           </div>
@@ -338,7 +338,7 @@ function Scene() {
 // Main Component Export
 export default function NodeGraph3D() {
   return (
-    <div className="h-full min-h-[400px] w-full rounded-xl overflow-hidden border border-cyan-500/30 bg-black/50 relative">
+    <div className="h-[600px] w-full rounded-xl overflow-hidden border border-cyan-500/30 bg-black/50 relative">
       {/* Overlay UI */}
       <div className="absolute top-4 left-4 z-10 pointer-events-none">
         <div className="flex items-center gap-4 text-xs font-mono">
