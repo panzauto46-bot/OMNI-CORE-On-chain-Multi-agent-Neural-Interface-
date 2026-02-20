@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Network, Wallet, FileText, Gauge } from 'lucide-react';
+import type { WalletData } from './services/web3Client';
 
 import { Header } from './components/Header';
 import { Panel } from './components/Panel';
@@ -46,6 +47,7 @@ export function App() {
   const [tasks, setTasks] = useState<Task[]>(initialTasks);
   const [agents] = useState<Agent[]>(initialAgents);
   const [auditLogs] = useState<AuditLog[]>(initialAuditLogs);
+  const [walletData, setWalletData] = useState<WalletData | null>(null);
 
   // Use a ref to track status so the useEffect doesn't re-trigger
   const statusRef = useRef(status);
@@ -254,7 +256,16 @@ export function App() {
               icon={<Wallet className="w-5 h-5" />}
             >
               <div className="p-4">
-                <WalletConnect />
+                <WalletConnect
+                  onConnect={(data) => {
+                    setWalletData(data);
+                    addLog(`Wallet connected: ${data.shortAddress} on ${data.chainName}`, 'success');
+                  }}
+                  onDisconnect={() => {
+                    setWalletData(null);
+                    addLog('Wallet disconnected.', 'warning');
+                  }}
+                />
               </div>
             </Panel>
 
@@ -264,7 +275,7 @@ export function App() {
               className="flex-1 overflow-hidden"
             >
               <div className="p-4 flex-1 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-neon-cyan/20 scrollbar-track-transparent">
-                <TreasuryWatch />
+                <TreasuryWatch walletData={walletData} />
               </div>
             </Panel>
 
