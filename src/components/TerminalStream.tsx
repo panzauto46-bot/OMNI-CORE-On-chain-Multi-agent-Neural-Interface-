@@ -74,7 +74,7 @@ export function TerminalStream({ logs }: TerminalStreamProps) {
   return (
     <div
       ref={scrollRef}
-      className="h-[600px] overflow-y-auto font-mono text-sm p-4 space-y-2 scrollbar-thin scrollbar-thumb-neon-cyan/20 scrollbar-track-transparent"
+      className="h-full overflow-y-auto font-mono text-sm p-4 space-y-2 scrollbar-thin scrollbar-thumb-neon-cyan/20 scrollbar-track-transparent"
     >
       <AnimatePresence>
         {displayedLogs.map((log) => (
