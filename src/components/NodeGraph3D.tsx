@@ -12,12 +12,6 @@ interface NodeData {
   task?: string;
 }
 
-interface ConnectionData {
-  from: string;
-  to: string;
-  dataFlow: boolean;
-}
-
 // Mock data for nodes - Synced with CortensorClient
 const NODES: NodeData[] = [
   // Groq Central Node
@@ -40,25 +34,6 @@ const NODES: NodeData[] = [
   { id: 'Validator-4', position: [-7, -3, -2], type: 'validator', status: 'idle', task: 'Standby' },
 ];
 
-// Connections between nodes
-const CONNECTIONS: ConnectionData[] = [
-  { from: 'groq-core', to: 'worker-1', dataFlow: true },
-  { from: 'groq-core', to: 'worker-2', dataFlow: true },
-  { from: 'groq-core', to: 'worker-3', dataFlow: false },
-  { from: 'groq-core', to: 'worker-4', dataFlow: true },
-  { from: 'groq-core', to: 'worker-5', dataFlow: true },
-  { from: 'groq-core', to: 'worker-6', dataFlow: false },
-  { from: 'groq-core', to: 'worker-7', dataFlow: true },
-  { from: 'groq-core', to: 'worker-8', dataFlow: true },
-  { from: 'worker-1', to: 'validator-1', dataFlow: true },
-  { from: 'worker-2', to: 'validator-1', dataFlow: false },
-  { from: 'worker-5', to: 'validator-3', dataFlow: true },
-  { from: 'worker-6', to: 'validator-4', dataFlow: false },
-  { from: 'worker-8', to: 'validator-2', dataFlow: true },
-  { from: 'validator-1', to: 'validator-2', dataFlow: true },
-  { from: 'validator-3', to: 'validator-4', dataFlow: false },
-];
-
 // Color scheme
 const COLORS = {
   groq: '#00F0FF',
@@ -66,6 +41,7 @@ const COLORS = {
   validator: '#FF6B35',
   connection: '#00F0FF',
   dataFlow: '#FFFFFF',
+  beam: '#00FF88',
 };
 
 // Glow Sphere Component
@@ -200,6 +176,81 @@ function DataParticle({ start, end, speed = 1 }: {
   );
 }
 
+// ⚡ BONUS: Energy Beam from Groq Core to Active Node
+function EnergyBeam({ from, to }: { from: NodeData; to: NodeData }) {
+  const beamRef = useRef<THREE.Mesh>(null);
+  const particlesRef = useRef<THREE.Group>(null);
+
+  const start = useMemo(() => new THREE.Vector3(...from.position), [from.position]);
+  const end = useMemo(() => new THREE.Vector3(...to.position), [to.position]);
+  const midPoint = useMemo(() => {
+    const mid = new THREE.Vector3().lerpVectors(start, end, 0.5);
+    mid.y += 2; // Arc upward
+    return mid;
+  }, [start, end]);
+
+  const curve = useMemo(() => {
+    return new THREE.QuadraticBezierCurve3(start, midPoint, end);
+  }, [start, midPoint, end]);
+
+  const tubeGeometry = useMemo(() => {
+    return new THREE.TubeGeometry(curve, 32, 0.08, 8, false);
+  }, [curve]);
+
+  useFrame((state) => {
+    if (beamRef.current) {
+      const mat = beamRef.current.material as THREE.MeshBasicMaterial;
+      mat.opacity = 0.4 + Math.sin(state.clock.elapsedTime * 4) * 0.3;
+    }
+    if (particlesRef.current) {
+      particlesRef.current.children.forEach((child, i) => {
+        const t = ((state.clock.elapsedTime * 0.8 + i * 0.25) % 1);
+        const pos = curve.getPoint(t);
+        child.position.copy(pos);
+        const s = 0.15 + Math.sin(t * Math.PI) * 0.1;
+        child.scale.set(s, s, s);
+      });
+    }
+  });
+
+  return (
+    <group>
+      {/* Beam tube */}
+      <mesh ref={beamRef} geometry={tubeGeometry}>
+        <meshBasicMaterial
+          color={COLORS.beam}
+          transparent
+          opacity={0.6}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Glow beam (wider, more transparent) */}
+      <mesh geometry={new THREE.TubeGeometry(curve, 32, 0.2, 8, false)}>
+        <meshBasicMaterial
+          color={COLORS.beam}
+          transparent
+          opacity={0.1}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Traveling particles along beam */}
+      <group ref={particlesRef}>
+        {[0, 1, 2, 3].map(i => (
+          <mesh key={`beam-particle-${i}`}>
+            <sphereGeometry args={[0.2, 8, 8]} />
+            <meshBasicMaterial color={COLORS.beam} />
+          </mesh>
+        ))}
+      </group>
+
+      {/* Impact glow at target */}
+      <pointLight position={to.position} color={COLORS.beam} intensity={2} distance={5} />
+    </group>
+  );
+}
+
 // Connection Line
 function ConnectionLine({ from, to, dataFlow }: {
   from: NodeData;
@@ -282,11 +333,9 @@ function Scene({ activeNodeId }: { activeNodeId?: string | null }) {
     );
   }, [activeNodeId]);
 
-  const nodeMap = useMemo(() => {
-    const map = new Map<string, NodeData>();
-    displayNodes.forEach(node => map.set(node.id, node));
-    return map;
-  }, [displayNodes]);
+  // Find the active node and Groq Core for beam
+  const groqCore = displayNodes[0]; // Always first
+  const activeNode = activeNodeId ? displayNodes.find(n => n.id === activeNodeId) : null;
 
   return (
     <>
@@ -314,11 +363,16 @@ function Scene({ activeNodeId }: { activeNodeId?: string | null }) {
       {displayNodes.filter(n => n.type !== 'groq').map((node, idx) => (
         <ConnectionLine
           key={`conn-${idx}`}
-          from={displayNodes[0]} // Assuming Groq Core is always the first node
+          from={displayNodes[0]}
           to={node}
           dataFlow={node.id === activeNodeId || node.status === 'busy'}
         />
       ))}
+
+      {/* ⚡ BONUS: Energy Beam to Active Node */}
+      {activeNode && (
+        <EnergyBeam from={groqCore} to={activeNode} />
+      )}
 
       {/* Nodes */}
       {displayNodes.map((node) => (
@@ -332,7 +386,7 @@ function Scene({ activeNodeId }: { activeNodeId?: string | null }) {
         enableRotate={true}
         minDistance={5}
         maxDistance={30}
-        autoRotate={!activeNodeId} // Stop rotation when active to focus
+        autoRotate={!activeNodeId}
         autoRotateSpeed={0.5}
       />
     </>
@@ -342,26 +396,37 @@ function Scene({ activeNodeId }: { activeNodeId?: string | null }) {
 // Main Component Export
 export default function NodeGraph3D({ activeNodeId }: { activeNodeId?: string | null }) {
   return (
-    <div className="h-[600px] w-full rounded-xl overflow-hidden border border-cyan-500/30 bg-black/50 relative">
+    <div className="h-[400px] sm:h-[500px] lg:h-[600px] w-full rounded-xl overflow-hidden border border-cyan-500/30 bg-black/50 relative">
       {/* Overlay UI */}
-      <div className="absolute top-4 left-4 z-10 pointer-events-none">
-        <div className="flex items-center gap-4 text-xs font-mono">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#00F0FF]" />
+      <div className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10 pointer-events-none">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[10px] sm:text-xs font-mono">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#00F0FF]" />
             <span className="text-cyan-300">Groq Core</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-purple-500" />
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-500" />
             <span className="text-purple-300">Workers</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-orange-500" />
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-orange-500" />
             <span className="text-orange-300">Validators</span>
           </div>
         </div>
       </div>
 
-      <div className="absolute bottom-4 right-4 z-10 text-xs text-gray-500 font-mono pointer-events-none">
+      {/* Active Node Indicator */}
+      {activeNodeId && (
+        <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 pointer-events-none">
+          <div className="bg-green-500/20 border border-green-500/50 rounded-lg px-2 py-1 sm:px-3 sm:py-1.5 animate-pulse">
+            <span className="text-green-400 text-[10px] sm:text-xs font-mono font-bold">
+              ⚡ {activeNodeId} ACTIVE
+            </span>
+          </div>
+        </div>
+      )}
+
+      <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 z-10 text-[10px] sm:text-xs text-gray-500 font-mono pointer-events-none">
         Drag to rotate • Scroll to zoom
       </div>
 

@@ -178,11 +178,11 @@ export function App() {
         <Header />
 
         {/* Main Content - 3 Panel Layout */}
-        <main className="flex-1 p-4 grid grid-cols-12 gap-4">
+        <main className="flex-1 p-2 sm:p-4 grid grid-cols-12 gap-2 sm:gap-4">
 
           {/* LEFT PANEL: Consciousness Stream */}
           <motion.div
-            className="col-span-12 lg:col-span-4 flex flex-col gap-4 h-[600px] lg:h-auto"
+            className="col-span-12 lg:col-span-4 flex flex-col gap-2 sm:gap-4 h-[500px] sm:h-[600px] lg:h-auto"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.1 }}
@@ -285,13 +285,13 @@ export function App() {
         </main>
 
         {/* Footer */}
-        <footer className="glass border-t border-white/5 px-6 py-3 flex items-center justify-between text-xs text-gray-600 font-mono">
-          <div className="flex items-center gap-4">
-            <span>OMNI-CORE v1.0.0-beta</span>
+        <footer className="glass border-t border-white/5 px-3 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-xs text-gray-600 font-mono">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <span>OMNI-CORE v1.0.0</span>
             <span className="text-gray-700">|</span>
-            <span>Hackathon #4 Build</span>
+            <span>Cortensor × Groq × DoraHacks</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <span>Groq Latency: <span className="text-neon-cyan">42ms</span></span>
             <span className="text-gray-700">|</span>
             <span>Cortensor Nodes: <span className="text-cortensor-purple">127 active</span></span>
