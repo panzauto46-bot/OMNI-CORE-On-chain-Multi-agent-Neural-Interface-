@@ -50,7 +50,7 @@ export function TerminalStream({ logs }: TerminalStreamProps) {
         setDisplayedLogs(prev => {
           const existing = prev.find(l => l.id === lastLog.id);
           if (existing) {
-            return prev.map(l => 
+            return prev.map(l =>
               l.id === lastLog.id ? { ...l, displayedText: currentText } : l
             );
           }
@@ -72,9 +72,9 @@ export function TerminalStream({ logs }: TerminalStreamProps) {
   }, [displayedLogs]);
 
   return (
-    <div 
+    <div
       ref={scrollRef}
-      className="h-full overflow-y-auto font-mono text-sm p-4 space-y-2"
+      className="h-[400px] overflow-y-auto font-mono text-sm p-4 space-y-2 scrollbar-thin scrollbar-thumb-neon-cyan/20 scrollbar-track-transparent"
     >
       <AnimatePresence>
         {displayedLogs.map((log) => (

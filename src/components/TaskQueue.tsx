@@ -42,7 +42,7 @@ const statusConfig = {
 
 export function TaskQueue({ tasks }: TaskQueueProps) {
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-cortensor-purple/20 scrollbar-track-transparent">
       <table className="w-full text-sm font-mono">
         <thead>
           <tr className="text-gray-500 text-xs uppercase tracking-wider">
@@ -57,7 +57,7 @@ export function TaskQueue({ tasks }: TaskQueueProps) {
           {tasks.map((task, index) => {
             const config = statusConfig[task.status];
             const Icon = config.icon;
-            
+
             return (
               <motion.tr
                 key={task.id}
@@ -89,7 +89,7 @@ export function TaskQueue({ tasks }: TaskQueueProps) {
           })}
         </tbody>
       </table>
-      
+
       {tasks.length === 0 && (
         <div className="text-center py-8 text-gray-600 font-mono">
           No tasks delegated yet
