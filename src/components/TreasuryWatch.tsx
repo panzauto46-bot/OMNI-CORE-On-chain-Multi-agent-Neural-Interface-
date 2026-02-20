@@ -20,12 +20,16 @@ const assets: Asset[] = [
   { symbol: 'BNB', name: 'BNB', balance: '12.5431', value: '$3,842.12', change: 2.34 },
   { symbol: 'CAKE', name: 'PancakeSwap', balance: '1,250.00', value: '$2,125.00', change: -1.23 },
   { symbol: 'USDT', name: 'Tether', balance: '5,000.00', value: '$5,000.00', change: 0.01 },
+  { symbol: 'BTCB', name: 'Bitcoin BEP2', balance: '0.1500', value: '$9,450.00', change: 1.56 },
+  { symbol: 'ETH', name: 'Ethereum', balance: '1.2000', value: '$3,890.00', change: 0.89 },
 ];
 
 const contracts: Contract[] = [
   { name: 'LP-BNB/CAKE', address: '0x0eD7e...3c4F', status: 'guarded' },
   { name: 'Staking Pool', address: '0x7Bc9a...d2E1', status: 'monitoring' },
   { name: 'Yield Vault', address: '0x4Fd2c...a8B3', status: 'guarded' },
+  { name: 'Router V2', address: '0x1A2b3...4C5d', status: 'guarded' },
+  { name: 'Bridge Proxy', address: '0x9E8d7...6B5a', status: 'warning' },
 ];
 
 const statusColors = {
