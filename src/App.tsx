@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+﻿import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Brain, Network, Wallet, FileText, Gauge } from 'lucide-react';
 import type { WalletData } from './services/web3Client';
@@ -39,6 +39,11 @@ const initialAuditLogs: AuditLog[] = [
 ];
 
 export function App() {
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const stored = localStorage.getItem('omni-theme');
+    if (stored === 'dark' || stored === 'light') return stored;
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  });
   const [status, setStatus] = useState<'idle' | 'thinking' | 'delegating'>('idle');
   const [activeNodeId, setActiveNodeId] = useState<string | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([
@@ -52,6 +57,12 @@ export function App() {
   // Use a ref to track status so the useEffect doesn't re-trigger
   const statusRef = useRef(status);
   useEffect(() => { statusRef.current = status; }, [status]);
+
+  useEffect(() => {
+    document.documentElement.classList.remove('theme-dark', 'theme-light');
+    document.documentElement.classList.add(theme === 'dark' ? 'theme-dark' : 'theme-light');
+    localStorage.setItem('omni-theme', theme);
+  }, [theme]);
 
   // Live Consciousness Stream - Real AI (runs ONCE on mount)
   useEffect(() => {
@@ -163,24 +174,15 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-void-black text-white">
-      {/* Background Grid */}
-      <div className="fixed inset-0 opacity-20">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px)
-          `,
-          backgroundSize: '50px 50px',
-        }} />
-      </div>
+    <div className={`app-shell ${theme === 'light' ? 'theme-light' : 'theme-dark'}`}>
+      <div className="app-grid" />
 
       {/* Main Layout */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        <Header />
+        <Header theme={theme} onToggleTheme={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />
 
         {/* Main Content - 3 Panel Layout */}
-        <main className="flex-1 p-2 sm:p-4 grid grid-cols-12 gap-2 sm:gap-4">
+        <main className="flex-1 p-2 sm:p-4 lg:p-5 grid grid-cols-12 gap-2 sm:gap-4 lg:gap-5 max-w-[1880px] w-full mx-auto">
 
           {/* LEFT PANEL: Consciousness Stream */}
           <motion.div
@@ -196,7 +198,7 @@ export function App() {
               variant="cyan"
               className="flex-1 flex flex-col"
             >
-              <div className="p-4 border-b border-neon-cyan/20">
+              <div className="p-4 border-b panel-border">
                 <StatusOrb status={status} />
               </div>
               <div className="flex-1 min-h-0 overflow-hidden">
@@ -227,9 +229,9 @@ export function App() {
               subtitle="Cortensor Delegations"
               icon={<Gauge className="w-5 h-5" />}
               variant="purple"
-              className="flex-1 overflow-hidden"
+              className="flex-1 overflow-hidden min-h-[240px]"
             >
-              <div className="max-h-48 overflow-y-auto">
+              <div className="max-h-[260px] overflow-y-auto">
                 <TaskQueue tasks={tasks} />
               </div>
             </Panel>
@@ -274,7 +276,7 @@ export function App() {
               subtitle="Portfolio & Guarded Contracts"
               className="flex-1 overflow-hidden"
             >
-              <div className="p-4 flex-1 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-neon-cyan/20 scrollbar-track-transparent">
+              <div className="p-4 flex-1 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-slate-500/30 scrollbar-track-transparent">
                 <TreasuryWatch walletData={walletData} />
               </div>
             </Panel>
@@ -296,15 +298,15 @@ export function App() {
         </main>
 
         {/* Footer */}
-        <footer className="glass border-t border-white/5 px-3 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-xs text-gray-600 font-mono">
+        <footer className="footer-surface px-3 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[10px] sm:text-xs text-app-muted font-mono">
           <div className="flex items-center gap-2 sm:gap-4">
             <span>OMNI-CORE v1.0.0</span>
-            <span className="text-gray-700">|</span>
-            <span>Cortensor × Groq × DoraHacks</span>
+            <span className="text-app-muted">|</span>
+            <span>Cortensor x Groq x DoraHacks</span>
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <span>Groq Latency: <span className="text-neon-cyan">42ms</span></span>
-            <span className="text-gray-700">|</span>
+            <span className="text-app-muted">|</span>
             <span>Cortensor Nodes: <span className="text-cortensor-purple">127 active</span></span>
           </div>
         </footer>
@@ -312,3 +314,5 @@ export function App() {
     </div>
   );
 }
+
+

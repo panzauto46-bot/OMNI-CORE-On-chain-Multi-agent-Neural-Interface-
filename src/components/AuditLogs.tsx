@@ -30,22 +30,22 @@ export function AuditLogs({ logs }: AuditLogsProps) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-white text-sm truncate">{log.title}</span>
+              <span className="text-app-primary text-sm truncate">{log.title}</span>
               {log.verified && (
                 <Shield className="w-3 h-3 text-success-green shrink-0" />
               )}
             </div>
-            <div className="flex items-center gap-2 text-xs text-gray-600">
+            <div className="flex items-center gap-2 text-xs text-app-muted">
               <span>{log.timestamp}</span>
               <span className="font-mono">{log.hash.slice(0, 12)}...</span>
             </div>
           </div>
-          <ExternalLink className="w-4 h-4 text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <ExternalLink className="w-4 h-4 text-app-muted opacity-0 group-hover:opacity-100 transition-opacity" />
         </motion.div>
       ))}
 
       {logs.length === 0 && (
-        <div className="text-center py-6 text-gray-600 font-mono text-sm">
+        <div className="text-center py-6 text-app-muted font-mono text-sm">
           No audit logs yet
         </div>
       )}

@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState } from 'react';
+﻿import { useRef, useMemo, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars, Html } from '@react-three/drei';
 import * as THREE from 'three';
@@ -176,7 +176,7 @@ function DataParticle({ start, end, speed = 1 }: {
   );
 }
 
-// ⚡ BONUS: Energy Beam from Groq Core to Active Node
+// Bonus: Energy Beam from Groq Core to Active Node
 function EnergyBeam({ from, to }: { from: NodeData; to: NodeData }) {
   const beamRef = useRef<THREE.Mesh>(null);
   const particlesRef = useRef<THREE.Group>(null);
@@ -369,7 +369,7 @@ function Scene({ activeNodeId }: { activeNodeId?: string | null }) {
         />
       ))}
 
-      {/* ⚡ BONUS: Energy Beam to Active Node */}
+      {/* Bonus: Energy Beam to Active Node */}
       {activeNode && (
         <EnergyBeam from={groqCore} to={activeNode} />
       )}
@@ -420,14 +420,14 @@ export default function NodeGraph3D({ activeNodeId }: { activeNodeId?: string | 
         <div className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 pointer-events-none">
           <div className="bg-green-500/20 border border-green-500/50 rounded-lg px-2 py-1 sm:px-3 sm:py-1.5 animate-pulse">
             <span className="text-green-400 text-[10px] sm:text-xs font-mono font-bold">
-              ⚡ {activeNodeId} ACTIVE
+              {activeNodeId} ACTIVE
             </span>
           </div>
         </div>
       )}
 
-      <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 z-10 text-[10px] sm:text-xs text-gray-500 font-mono pointer-events-none">
-        Drag to rotate • Scroll to zoom
+      <div className="absolute bottom-2 right-2 sm:bottom-4 sm:right-4 z-10 text-[10px] sm:text-xs text-app-muted font-mono pointer-events-none">
+        Drag to rotate - Scroll to zoom
       </div>
 
       {/* 3D Canvas */}
@@ -442,3 +442,4 @@ export default function NodeGraph3D({ activeNodeId }: { activeNodeId?: string | 
     </div>
   );
 }
+

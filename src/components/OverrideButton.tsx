@@ -37,17 +37,17 @@ export function OverrideButton({ onOverride }: OverrideButtonProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-void-gray border border-danger-red/50 rounded-2xl p-6 max-w-md mx-4 relative glow-red"
+              className="glass border border-danger-red/50 rounded-2xl p-6 max-w-md mx-4 relative glow-red"
             >
               <button
                 onClick={() => setShowConfirm(false)}
-                className="absolute top-4 right-4 text-gray-500 hover:text-white transition-colors"
+                className="absolute top-4 right-4 text-app-muted hover:text-app-primary transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -57,12 +57,12 @@ export function OverrideButton({ onOverride }: OverrideButtonProps) {
                   <AlertTriangle className="w-8 h-8 text-danger-red" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Human Override</h3>
-                  <p className="text-gray-500 text-sm">Emergency Control Transfer</p>
+                  <h3 className="text-xl font-bold text-app-primary">Human Override</h3>
+                  <p className="text-app-muted text-sm">Emergency Control Transfer</p>
                 </div>
               </div>
 
-              <p className="text-gray-400 mb-6">
+              <p className="text-app-secondary mb-6">
                 This will immediately halt all OMNI-CORE operations and transfer full control to you. 
                 All pending Cortensor delegations will be cancelled.
               </p>
@@ -94,7 +94,7 @@ export function OverrideButton({ onOverride }: OverrideButtonProps) {
                 
                 <button
                   onClick={() => setShowConfirm(false)}
-                  className="w-full py-3 rounded-xl bg-gray-800 text-gray-400 font-medium hover:bg-gray-700 transition-colors"
+                  className="w-full py-3 rounded-xl bg-slate-500/20 text-app-secondary font-medium hover:bg-slate-500/30 transition-colors"
                 >
                   Cancel
                 </button>

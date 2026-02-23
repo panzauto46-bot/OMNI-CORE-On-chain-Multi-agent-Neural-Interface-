@@ -45,7 +45,7 @@ export function TaskQueue({ tasks }: TaskQueueProps) {
     <div className="overflow-x-auto max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-cortensor-purple/20 scrollbar-track-transparent">
       <table className="w-full text-sm font-mono">
         <thead>
-          <tr className="text-gray-500 text-xs uppercase tracking-wider">
+          <tr className="text-app-muted text-xs uppercase tracking-wider">
             <th className="text-left py-2 px-3">Task ID</th>
             <th className="text-left py-2 px-3">Type</th>
             <th className="text-left py-2 px-3">Node</th>
@@ -64,15 +64,15 @@ export function TaskQueue({ tasks }: TaskQueueProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="border-t border-gray-800 hover:bg-white/5 transition-colors"
+                className="border-t panel-border hover:bg-white/5 transition-colors"
               >
-                <td className="py-3 px-3 text-gray-400">
+                <td className="py-3 px-3 text-app-secondary">
                   {task.id}
                 </td>
                 <td className="py-3 px-3 text-cortensor-purple">
                   {task.taskType}
                 </td>
-                <td className="py-3 px-3 text-gray-400">
+                <td className="py-3 px-3 text-app-secondary">
                   {task.delegatedTo}
                 </td>
                 <td className="py-3 px-3">
@@ -81,7 +81,7 @@ export function TaskQueue({ tasks }: TaskQueueProps) {
                     {config.label}
                   </span>
                 </td>
-                <td className="py-3 px-3 text-gray-600 text-xs">
+                <td className="py-3 px-3 text-app-muted text-xs">
                   {task.poiHash.slice(0, 20)}...
                 </td>
               </motion.tr>
@@ -91,7 +91,7 @@ export function TaskQueue({ tasks }: TaskQueueProps) {
       </table>
 
       {tasks.length === 0 && (
-        <div className="text-center py-8 text-gray-600 font-mono">
+        <div className="text-center py-8 text-app-muted font-mono">
           No tasks delegated yet
         </div>
       )}

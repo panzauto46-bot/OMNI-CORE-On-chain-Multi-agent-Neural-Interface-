@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+﻿import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LogEntry {
@@ -84,30 +84,30 @@ export function TerminalStream({ logs }: TerminalStreamProps) {
             animate={{ opacity: 1, x: 0 }}
             className="flex gap-2"
           >
-            <span className="text-gray-600 shrink-0">{log.timestamp}</span>
+            <span className="text-app-muted shrink-0">{log.timestamp}</span>
             <span className={`${typeColors[log.type]} shrink-0`}>
               {typeLabels[log.type]}
             </span>
-            <span className="text-gray-300">{log.displayedText}</span>
+            <span className="text-app-secondary">{log.displayedText}</span>
             <motion.span
               className="text-neon-cyan"
               animate={{ opacity: [1, 0, 1] }}
               transition={{ duration: 0.8, repeat: Infinity }}
             >
-              ▌
+              |
             </motion.span>
           </motion.div>
         ))}
       </AnimatePresence>
       {displayedLogs.length === 0 && (
-        <div className="text-gray-600 flex items-center gap-2">
+        <div className="text-app-muted flex items-center gap-2">
           <span>OMNI-CORE v1.0.0 initialized</span>
           <motion.span
             animate={{ opacity: [1, 0, 1] }}
             transition={{ duration: 0.8, repeat: Infinity }}
             className="text-neon-cyan"
           >
-            ▌
+            |
           </motion.span>
         </div>
       )}
@@ -116,3 +116,4 @@ export function TerminalStream({ logs }: TerminalStreamProps) {
 }
 
 export type { LogEntry };
+

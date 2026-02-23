@@ -119,10 +119,10 @@ export function WalletConnect({ onConnect, onDisconnect }: WalletConnectProps) {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-white font-mono text-sm">{wallet.shortAddress}</span>
+              <span className="text-app-primary font-mono text-sm">{wallet.shortAddress}</span>
               <button
                 onClick={handleCopy}
-                className="text-gray-500 hover:text-white transition-colors"
+                className="text-app-muted hover:text-app-primary transition-colors"
                 title="Copy address"
               >
                 {copied ? <Check className="w-4 h-4 text-success-green" /> : <Copy className="w-4 h-4" />}
@@ -131,7 +131,7 @@ export function WalletConnect({ onConnect, onDisconnect }: WalletConnectProps) {
                 href={getExplorerLink(wallet.address, wallet.chainId)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-500 hover:text-white transition-colors"
+                className="text-app-muted hover:text-app-primary transition-colors"
                 title="View on explorer"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -139,13 +139,13 @@ export function WalletConnect({ onConnect, onDisconnect }: WalletConnectProps) {
             </div>
             <div className="flex items-center gap-2 mt-1">
               <span className="w-2 h-2 rounded-full bg-success-green animate-pulse" />
-              <span className="text-xs text-gray-500">{wallet.chainName}</span>
+              <span className="text-xs text-app-muted">{wallet.chainName}</span>
             </div>
           </div>
         </div>
         <button
           onClick={handleDisconnect}
-          className="text-gray-600 hover:text-danger-red transition-colors"
+          className="text-app-muted hover:text-danger-red transition-colors"
           title="Disconnect"
         >
           <Unplug className="w-4 h-4" />
@@ -154,8 +154,8 @@ export function WalletConnect({ onConnect, onDisconnect }: WalletConnectProps) {
 
       {/* Balance */}
       <div className="glass rounded-lg p-3 flex items-center justify-between">
-        <span className="text-xs text-gray-500 uppercase tracking-wider">Balance</span>
-        <span className="text-white font-mono font-bold text-lg">{wallet.balance} BNB</span>
+        <span className="text-xs text-app-muted uppercase tracking-wider">Balance</span>
+        <span className="text-app-primary font-mono font-bold text-lg">{wallet.balance} BNB</span>
       </div>
     </div>
   );

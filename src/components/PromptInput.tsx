@@ -19,7 +19,7 @@ export function PromptInput({ onSubmit, disabled }: PromptInputProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border-t border-gray-800">
+    <form onSubmit={handleSubmit} className="p-4 border-t panel-border">
       <div className="flex items-center gap-3 glass-cyan rounded-lg px-4 py-3">
         <Terminal className="w-5 h-5 text-neon-cyan shrink-0" />
         <span className="text-neon-cyan font-mono shrink-0">{'>'}</span>
@@ -29,7 +29,7 @@ export function PromptInput({ onSubmit, disabled }: PromptInputProps) {
           onChange={(e) => setInput(e.target.value)}
           placeholder="Enter command for OMNI-CORE..."
           disabled={disabled}
-          className="flex-1 bg-transparent text-gray-200 font-mono text-sm placeholder:text-gray-600 focus:outline-none"
+          className="flex-1 bg-transparent text-app-primary font-mono text-sm placeholder:text-app-muted focus:outline-none"
         />
         <motion.button
           type="submit"
@@ -41,7 +41,7 @@ export function PromptInput({ onSubmit, disabled }: PromptInputProps) {
           <Send className="w-4 h-4" />
         </motion.button>
       </div>
-      <div className="mt-2 flex gap-2 text-xs text-gray-600 font-mono">
+      <div className="mt-2 flex gap-2 text-xs text-app-muted font-mono">
         <span>Try:</span>
         <button
           type="button"

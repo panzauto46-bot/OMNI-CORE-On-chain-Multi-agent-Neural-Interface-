@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown, Shield, Eye, Wallet } from 'lucide-react';
 import type { WalletData } from '../services/web3Client';
 
@@ -82,24 +82,24 @@ export function TreasuryWatch({ walletData }: TreasuryWatchProps) {
 
       {/* Total Value */}
       <div className="glass rounded-xl p-4">
-        <div className="text-gray-500 text-xs uppercase tracking-wider mb-1">Total Treasury Value</div>
+        <div className="text-app-muted text-xs uppercase tracking-wider mb-1">Total Treasury Value</div>
         <div className="flex items-end gap-3">
-          <span className="text-2xl font-bold text-white font-mono">{totalValue}</span>
+          <span className="text-2xl font-bold text-app-primary font-mono">{totalValue}</span>
           <span className="text-success-green text-sm flex items-center gap-1 mb-1">
             <TrendingUp className="w-4 h-4" />
             +3.42%
           </span>
         </div>
         {!isConnected && (
-          <div className="text-gray-600 text-[10px] mt-1 font-mono">
-            ⚠ Simulated data — connect wallet for live balance
+          <div className="text-app-muted text-[10px] mt-1 font-mono">
+            Simulated data - connect wallet for live balance
           </div>
         )}
       </div>
 
       {/* Asset List */}
       <div className="space-y-2">
-        <div className="text-gray-500 text-xs uppercase tracking-wider px-1">Assets</div>
+        <div className="text-app-muted text-xs uppercase tracking-wider px-1">Assets</div>
         {assets.map((asset, index) => (
           <motion.div
             key={asset.symbol}
@@ -116,17 +116,17 @@ export function TreasuryWatch({ walletData }: TreasuryWatchProps) {
                 {asset.symbol.slice(0, 2)}
               </div>
               <div>
-                <div className="text-white text-sm font-medium flex items-center gap-1">
+                <div className="text-app-primary text-sm font-medium flex items-center gap-1">
                   {asset.symbol}
                   {isConnected && index === 0 && (
                     <span className="text-[9px] bg-success-green/20 text-success-green px-1.5 py-0.5 rounded-full font-mono">LIVE</span>
                   )}
                 </div>
-                <div className="text-gray-500 text-xs">{asset.balance}</div>
+                <div className="text-app-muted text-xs">{asset.balance}</div>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-white text-sm font-mono">{asset.value}</div>
+              <div className="text-app-primary text-sm font-mono">{asset.value}</div>
               <div className={`text-xs flex items-center justify-end gap-1 ${asset.change >= 0 ? 'text-success-green' : 'text-danger-red'}`}>
                 {asset.change >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                 {Math.abs(asset.change)}%
@@ -138,7 +138,7 @@ export function TreasuryWatch({ walletData }: TreasuryWatchProps) {
 
       {/* Guarded Contracts */}
       <div className="space-y-2">
-        <div className="text-gray-500 text-xs uppercase tracking-wider px-1 flex items-center gap-2">
+        <div className="text-app-muted text-xs uppercase tracking-wider px-1 flex items-center gap-2">
           <Shield className="w-3 h-3" />
           Guarded Contracts
         </div>
@@ -151,8 +151,8 @@ export function TreasuryWatch({ walletData }: TreasuryWatchProps) {
             className="glass rounded-lg p-3 flex items-center justify-between"
           >
             <div>
-              <div className="text-white text-sm">{contract.name}</div>
-              <div className="text-gray-600 text-xs font-mono">{contract.address}</div>
+              <div className="text-app-primary text-sm">{contract.name}</div>
+              <div className="text-app-muted text-xs font-mono">{contract.address}</div>
             </div>
             <div className={`flex items-center gap-1 ${statusColors[contract.status]}`}>
               <Eye className="w-4 h-4" />
@@ -164,3 +164,4 @@ export function TreasuryWatch({ walletData }: TreasuryWatchProps) {
     </div>
   );
 }
+
