@@ -37,8 +37,8 @@ const NODES: NodeData[] = [
 // Color scheme
 const COLORS = {
   groq: '#00F0FF',
-  worker: '#9D4EDD',
-  validator: '#FF6B35',
+  worker: '#4F7CFF',
+  validator: '#FF7A1A',
   connection: '#00F0FF',
   dataFlow: '#FFFFFF',
   beam: '#00FF88',
@@ -134,7 +134,7 @@ function CoreNode({ node }: { node: NodeData }) {
       <Html distanceFactor={10}>
         <div className="pointer-events-none whitespace-nowrap">
           <div className={`text-xs font-mono font-bold px-2 py-1 rounded ${node.type === 'groq' ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500/50' :
-            node.type === 'worker' ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50' :
+            node.type === 'worker' ? 'bg-blue-500/30 text-blue-300 border border-blue-500/50' :
               'bg-orange-500/30 text-orange-300 border border-orange-500/50'
             }`}>
             {node.id}
@@ -405,8 +405,8 @@ export default function NodeGraph3D({ activeNodeId }: { activeNodeId?: string | 
             <span className="text-cyan-300">Groq Core</span>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
-            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-purple-500" />
-            <span className="text-purple-300">Workers</span>
+            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-blue-500" />
+            <span className="text-blue-300">Workers</span>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">
             <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-orange-500" />

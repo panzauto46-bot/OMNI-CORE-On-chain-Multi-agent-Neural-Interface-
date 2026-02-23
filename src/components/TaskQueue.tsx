@@ -42,7 +42,7 @@ const statusConfig = {
 
 export function TaskQueue({ tasks }: TaskQueueProps) {
   return (
-    <div className="overflow-x-auto max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-cortensor-purple/20 scrollbar-track-transparent">
+    <div className="overflow-x-auto max-h-[200px] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-500/30 scrollbar-track-transparent">
       <table className="w-full text-sm font-mono">
         <thead>
           <tr className="text-app-muted text-xs uppercase tracking-wider">
@@ -69,7 +69,7 @@ export function TaskQueue({ tasks }: TaskQueueProps) {
                 <td className="py-3 px-3 text-app-secondary">
                   {task.id}
                 </td>
-                <td className="py-3 px-3 text-cortensor-purple">
+                <td className="py-3 px-3 text-app-secondary">
                   {task.taskType}
                 </td>
                 <td className="py-3 px-3 text-app-secondary">

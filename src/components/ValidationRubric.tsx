@@ -65,11 +65,11 @@ export function ValidationRubric({ agents, consensus }: ValidationRubricProps) {
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div
                       key={i}
-                      className={`w-1.5 h-4 rounded-full ${i <= Math.ceil(agent.score / 20) ? 'bg-cortensor-purple' : 'bg-slate-500/30'}`}
+                      className={`w-1.5 h-4 rounded-full ${i <= Math.ceil(agent.score / 20) ? 'bg-neon-cyan' : 'bg-slate-500/30'}`}
                     />
                   ))}
                 </div>
-                <span className="text-xs font-mono text-cortensor-purple">{agent.score}</span>
+                <span className="text-xs font-mono text-neon-cyan">{agent.score}</span>
               </div>
             </div>
             <p className="text-xs text-app-muted italic">"{agent.argument}"</p>

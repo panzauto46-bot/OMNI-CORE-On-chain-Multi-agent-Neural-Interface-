@@ -13,7 +13,7 @@ const typeColors = {
   success: 'text-success-green',
   warning: 'text-warning-yellow',
   error: 'text-danger-red',
-  system: 'text-cortensor-purple',
+  system: 'text-cortensor-orange',
 };
 
 const typeLabels = {

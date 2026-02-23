@@ -19,7 +19,7 @@ const variantStyles = {
 const accentLine = {
   default: 'from-slate-400/40 to-transparent',
   cyan: 'from-neon-cyan/60 to-transparent',
-  purple: 'from-cortensor-purple/60 to-transparent',
+  purple: 'from-cortensor-orange/50 to-transparent',
 };
 
 export function Panel({ title, subtitle, icon, children, className = '', variant = 'default' }: PanelProps) {
@@ -36,12 +36,12 @@ export function Panel({ title, subtitle, icon, children, className = '', variant
       {/* Header */}
       <div className="px-4 py-3 border-b panel-border flex items-center gap-3">
         {icon && (
-          <div className={`${variant === 'cyan' ? 'text-neon-cyan' : variant === 'purple' ? 'text-cortensor-purple' : 'text-app-secondary'}`}>
+          <div className={`${variant === 'cyan' ? 'text-neon-cyan' : variant === 'purple' ? 'text-cortensor-orange' : 'text-app-secondary'}`}>
             {icon}
           </div>
         )}
         <div>
-          <h2 className={`font-semibold text-sm ${variant === 'cyan' ? 'text-neon-cyan' : variant === 'purple' ? 'text-cortensor-purple' : 'text-app-primary'}`}>
+          <h2 className={`font-semibold text-sm ${variant === 'cyan' ? 'text-neon-cyan' : 'text-app-primary'}`}>
             {title}
           </h2>
           {subtitle && (

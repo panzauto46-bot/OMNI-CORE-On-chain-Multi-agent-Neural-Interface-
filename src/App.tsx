@@ -219,7 +219,7 @@ export function App() {
               title="The Delegation Matrix"
               subtitle="Cortensor Network Visualization"
               icon={<Network className="w-5 h-5" />}
-              variant="purple"
+              variant="default"
             >
               <NodeGraph3D activeNodeId={activeNodeId} />
             </Panel>
@@ -228,7 +228,7 @@ export function App() {
               title="Live Task Queue"
               subtitle="Cortensor Delegations"
               icon={<Gauge className="w-5 h-5" />}
-              variant="purple"
+              variant="default"
               className="flex-1 overflow-hidden min-h-[240px]"
             >
               <div className="max-h-[260px] overflow-y-auto">
@@ -240,7 +240,7 @@ export function App() {
               title="Validation Rubric"
               subtitle="Multi-Agent Consensus"
               icon={<FileText className="w-5 h-5" />}
-              variant="purple"
+              variant="default"
             >
               <ValidationRubric agents={agents} consensus={86} />
             </Panel>
@@ -307,7 +307,7 @@ export function App() {
           <div className="flex items-center gap-2 sm:gap-4">
             <span>Groq Latency: <span className="text-neon-cyan">42ms</span></span>
             <span className="text-app-muted">|</span>
-            <span>Cortensor Nodes: <span className="text-cortensor-purple">127 active</span></span>
+            <span>Cortensor Nodes: <span className="text-cortensor-orange">127 active</span></span>
           </div>
         </footer>
       </div>

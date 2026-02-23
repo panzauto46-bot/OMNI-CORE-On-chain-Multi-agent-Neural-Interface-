@@ -97,7 +97,7 @@ export function WalletConnect({ onConnect, onDisconnect }: WalletConnectProps) {
           disabled={loading}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-cortensor-purple to-cortensor-orange text-white font-medium transition-all hover:shadow-lg hover:shadow-cortensor-purple/25 disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-neon-cyan to-cortensor-purple text-slate-950 font-semibold transition-all hover:shadow-lg hover:shadow-neon-cyan/20 disabled:opacity-50"
         >
           <Wallet className="w-5 h-5" />
           {loading ? 'Connecting...' : 'Connect Wallet'}
@@ -114,8 +114,8 @@ export function WalletConnect({ onConnect, onDisconnect }: WalletConnectProps) {
     <div className="glass-purple rounded-xl p-4 space-y-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cortensor-purple to-cortensor-orange flex items-center justify-center">
-            <Wallet className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-cyan to-cortensor-orange flex items-center justify-center">
+            <Wallet className="w-5 h-5 text-slate-950" />
           </div>
           <div>
             <div className="flex items-center gap-2">

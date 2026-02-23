@@ -58,9 +58,9 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
           </div>
           
           <div className="hidden md:flex items-center gap-2 text-sm px-3 h-10 rounded-xl glass panel-border">
-            <Activity className="w-4 h-4 text-cortensor-purple" />
+            <Activity className="w-4 h-4 text-cortensor-orange" />
             <span className="text-app-secondary">Cortensor</span>
-            <span className="w-2 h-2 rounded-full bg-cortensor-purple animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-cortensor-orange animate-pulse" />
           </div>
 
           <div className="hidden sm:block h-8 w-px bg-slate-500/30" />
